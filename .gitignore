@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+
+.idea/
+
+build/
+dist/
+uniswapx_sdk.egg-info/
+
+analysis/
+notes/
+
+.coverage
+.mypy_cache
+.pytest_cache
+.tox
