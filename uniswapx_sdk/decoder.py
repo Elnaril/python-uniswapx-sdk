@@ -6,12 +6,10 @@ from typing import (
 )
 
 from eth_abi import decode
-from eth_utils import (
-    to_bytes,
-)
+from eth_utils import to_bytes
 from web3.types import (
-    HexStr,
     HexBytes,
+    HexStr,
 )
 
 
