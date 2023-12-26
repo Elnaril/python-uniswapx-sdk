@@ -22,6 +22,7 @@ on:
       - 'LICENSE'
       - '.gitignore'
       - 'coverage.json'
+      - 'pyproject.toml'
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ "master" ]
@@ -33,6 +34,7 @@ on:
       - 'LICENSE'
       - '.gitignore'
       - 'coverage.json'
+      - 'pyproject.toml'
   schedule:
     - cron: '17 18 * * 5'
 

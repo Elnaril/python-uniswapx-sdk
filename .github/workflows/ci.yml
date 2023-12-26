@@ -10,6 +10,7 @@ on:
       - 'LICENSE'
       - '.gitignore'
       - 'coverage.json'
+      - 'pyproject.toml'
   pull_request:
     paths-ignore:
       - '.github/**'
@@ -19,6 +20,7 @@ on:
       - 'LICENSE'
       - '.gitignore'
       - 'coverage.json'
+      - 'pyproject.toml'
 
 jobs:
   build:
