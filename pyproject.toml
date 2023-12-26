@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "python uniswapx sdk"
+version = "0.0.1"
+authors = [
+  { name="Elnaril", email="elnaril_dev@caramail.com" },
+]
+description = "Python SDK for the UniswapX protocol"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+license = {text = "MIT License"}
+dependencies = [
+  "web3>=6.0.0,<7.0.0",
+]
+keywords = ["blockchain", "ethereum", "uniswap", "uniswapx", "decoder", "encoder", "codec", "wrapper", "sdk"]
+
+[tool.setuptools]
+packages = ["uniswapx-sdk"]
+
+[project.urls]
+"Homepage" = "https://github.com/Elnaril/python-uniswapx-sdk"
+"Bug Tracker" = "https://github.com/Elnaril/python-uniswapx-sdk/issues"
+"Fiverr" = "https://www.fiverr.com/freelancers/elnaril"
+"Buy Me A Coffee" = "https://www.buymeacoffee.com/elnaril"
