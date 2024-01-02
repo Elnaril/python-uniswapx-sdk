@@ -1,8 +1,10 @@
 from typing import (
     Any,
+    cast,
     Dict,
     Optional,
 )
+
 from aiohttp import ClientSession
 
 from uniswapx_sdk.constants import uniswapx_orders_endpoint
@@ -15,7 +17,7 @@ class UniswapXAPI:
     @staticmethod
     async def _get_orders(session: ClientSession, **params: str) -> Dict[str, Any]:
         async with session.get(url=uniswapx_orders_endpoint, params=params) as response:
-            return await response.json()
+            return cast(Dict[str, Any], await response.json())
 
     async def get_orders(
             self,
@@ -32,7 +34,7 @@ class UniswapXAPI:
         :return: The list of corresponding orders
         """
         params = kwargs.copy()
-        params.update({"chainId": self.chain_id, "orderStatus": order_status, "limit": limit})
+        params.update({"chainId": str(self.chain_id), "orderStatus": order_status, "limit": str(limit)})
         if session:
             return await self._get_orders(session, **params)
         else:

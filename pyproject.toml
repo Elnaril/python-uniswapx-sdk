@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uniswapx-sdk"
-version = "0.0.1"
+version = "0.0.2.dev0"
 authors = [
   { name="Elnaril", email="elnaril_dev@caramail.com" },
 ]
