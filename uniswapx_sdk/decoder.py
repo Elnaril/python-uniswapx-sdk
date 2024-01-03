@@ -1,6 +1,6 @@
 from typing import (
     Any,
-    Iterable,
+    Sequence,
     Tuple,
     Union,
 )
@@ -12,9 +12,11 @@ from web3.types import (
     HexStr,
 )
 
+from uniswapx_sdk.constants import exclusive_dutch_order_abi
+
 
 class _Decoder:
-    def __init__(self, abi: Iterable[str]) -> None:
+    def __init__(self, abi: Sequence[str]) -> None:
         self.abi = abi
 
     def decode(self, encoded_order: Union[HexStr, HexBytes]) -> Tuple[Any, ...]:
@@ -24,11 +26,10 @@ class _Decoder:
 
 
 class Decoder(_Decoder):
-    def __init__(self, abi: Iterable[str]) -> None:
+    def __init__(self, abi: Sequence[str]) -> None:
         super().__init__(abi)
 
 
-class ExclusiveDutchOrderDecoder(_Decoder):
+class ExclusiveDutchOrderDecoder(Decoder):
     def __init__(self) -> None:
-        abi = ['((address,address,uint256,uint256,address,bytes),uint256,uint256,address,uint256,(address,uint256,uint256),(address,uint256,uint256,address)[])']  # noqa
-        super().__init__(abi)
+        super().__init__(exclusive_dutch_order_abi)

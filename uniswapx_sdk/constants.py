@@ -13,3 +13,5 @@ order_quoter_abi = '[{"inputs":[],"name":"OrdersLengthIncorrect","type":"error"}
 
 uniswapx_api_root = "https://api.uniswap.org/v2/"
 uniswapx_orders_endpoint = f"{uniswapx_api_root}orders"
+
+exclusive_dutch_order_abi = ['((address,address,uint256,uint256,address,bytes),uint256,uint256,address,uint256,(address,uint256,uint256),(address,uint256,uint256,address)[])']  # noqa
