@@ -34,7 +34,7 @@ async def test_resolver(encoded_order, signature, block_number, expected_resolve
     resolver = await OrderResolver.create(rpc_endpoint=os.environ["RPC_ENDPOINT"])
     if expected_exception_cause:
         with pytest.raises(order_validation_exceptions[expected_exception_cause]):
-            _ = await resolver.get_quote(encoded_order, signature, block_number)
+            _ = await resolver.resolve(encoded_order, signature, block_number)
     else:
-        resolved_order = await resolver.get_quote(encoded_order, signature, block_number)
+        resolved_order = await resolver.resolve(encoded_order, signature, block_number)
         assert expected_resolved_order == resolved_order

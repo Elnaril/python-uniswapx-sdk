@@ -61,7 +61,7 @@ class OrderResolver:
         else:
             raise ValueError("Invalid parameters. Must provide either an AsyncWeb3 instance or a valid rpc address")
 
-    async def get_quote(
+    async def resolve(
             self,
             encoded_order: Union[HexStr, HexBytes],
             signature: Union[HexStr, HexBytes],
