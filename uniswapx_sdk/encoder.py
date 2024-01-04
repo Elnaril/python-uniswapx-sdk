@@ -2,6 +2,8 @@ from dataclasses import (
     astuple,
     dataclass,
 )
+from random import randint
+import time
 from typing import (
     Any,
     Optional,
@@ -67,6 +69,10 @@ class ExclusiveFiller:
 
     def __post_init__(self) -> None:
         self.filler = Web3.to_checksum_address(self.filler)
+
+
+def generate_nonce() -> int:
+    return time.time_ns() * 10**58 + randint(10**57, 10**58-1)
 
 
 class _Encoder:

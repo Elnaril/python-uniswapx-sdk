@@ -1,3 +1,5 @@
+import time
+
 from eth_utils import to_hex
 import pytest
 
@@ -8,6 +10,7 @@ from uniswapx_sdk.encoder import (
     ExclusiveDutchOrderInput,
     ExclusiveDutchOrderOutput,
     ExclusiveFiller,
+    generate_nonce,
 )
 
 
@@ -74,3 +77,10 @@ def test_exclusive_dutch_order_encoder(order, expected_args, expected_encoded_or
     encoder = ExclusiveDutchOrderEncoder()
     assert expected_args == encoder._create_args(*order_1)
     assert expected_encoded_order == to_hex(encoder.encode(*order_1))
+
+
+def test_generate_nonce():
+    lower_bound = time.time_ns() * 10**58
+    nonce = generate_nonce()
+    upper_bound = time.time_ns() * 10**58
+    assert lower_bound < nonce < upper_bound
