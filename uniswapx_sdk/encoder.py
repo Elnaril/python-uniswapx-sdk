@@ -25,9 +25,9 @@ from web3.types import (
 )
 
 from uniswapx_sdk.constants import (
-    permit2_domain_data,
     exclusive_dutch_order_abi,
     exclusive_dutch_order_types,
+    permit2_domain_data,
 )
 
 

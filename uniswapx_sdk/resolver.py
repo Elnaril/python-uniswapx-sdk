@@ -34,7 +34,7 @@ class OrderResolver:
     def __init__(self,  w3: AsyncWeb3, chain_id: int, quoter_address: ChecksumAddress) -> None:
         self._w3 = w3
         self._chain_id = chain_id
-        self.quoter = self._w3.eth.contract(address=quoter_address, abi=order_quoter_abi)
+        self._quoter = self._w3.eth.contract(address=quoter_address, abi=order_quoter_abi)
 
     @classmethod
     async def create(
@@ -75,7 +75,7 @@ class OrderResolver:
         """
         try:
             resolved_order: Tuple[Any, ...] = (
-                await self.quoter.functions.quote(encoded_order, signature).call(block_identifier=block_identifier)
+                await self._quoter.functions.quote(encoded_order, signature).call(block_identifier=block_identifier)
             )
             return resolved_order
         except ContractCustomError as e:

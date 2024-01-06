@@ -2,6 +2,7 @@ import os
 
 from eth_utils import to_bytes
 import pytest
+from web3 import AsyncWeb3
 from web3.types import HexStr
 
 from uniswapx_sdk.exceptions import order_validation_exceptions
@@ -43,3 +44,15 @@ async def test_resolver(encoded_order, signature, block_number, expected_resolve
     else:
         resolved_order = await resolver.resolve(encoded_order, signature, block_number)
         assert expected_resolved_order == resolved_order
+
+
+@pytest.mark.asyncio(scope="session")
+async def test_order_resolver_creation():
+    resolver_1 = await OrderResolver.create(rpc_endpoint=os.environ["RPC_ENDPOINT"])
+    assert resolver_1._chain_id == 1
+
+    resolver_2 = await OrderResolver.create(w3=AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(os.environ["RPC_ENDPOINT"])))
+    assert resolver_2._chain_id == 1
+
+    with pytest.raises(ValueError):
+        _ = await OrderResolver.create()
