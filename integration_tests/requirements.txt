@@ -1,0 +1,1 @@
+uniswap-universal-router-decoder==1.0.1
