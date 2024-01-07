@@ -25,6 +25,7 @@ from web3.types import (
 )
 
 from uniswapx_sdk.constants import (
+    _execute_function_selector,
     exclusive_dutch_order_abi,
     exclusive_dutch_order_types,
     permit2_domain_data,
@@ -80,22 +81,38 @@ class ExclusiveFiller:
         self.filler = Web3.to_checksum_address(self.filler)
 
 
-def generate_nonce() -> int:
+def get_deadline(duration: int = 10 * 60) -> int:
+    """
+    get deadline or expiration. Default is 10mn
+    :param duration: The number of seconds before reaching the deadline/expiration
+    :return: Unix timestamp corresponding to now + duration
+    """
+    return int(time.time() + duration)
+
+
+def get_nonce() -> int:
+    """
+    :return: nonce used to build orders
+    """
     return time.time_ns() * 10**58 + randint(10**57, 10**58-1)
 
 
 class _Encoder:
-    def __init__(self, chain_id: int, abi: Sequence[str]) -> None:
+    def __init__(self, chain_id: int, order_abi: Sequence[str]) -> None:
         self.chain_id = chain_id
-        self.abi = abi
+        self.order_abi = order_abi
 
     def _encode(self, args: Sequence[Any]) -> bytes:
-        return encode(self.abi, args)
+        return encode(self.order_abi, args)
+
+    @staticmethod
+    def _execute(order: bytes, sig: bytes) -> HexStr:
+        return HexStr(_execute_function_selector + encode(('(bytes,bytes)', ), ((order, sig), )).hex())
 
 
 class Encoder(_Encoder):
-    def __init__(self, chain_id: int, abi: Sequence[str]) -> None:
-        super().__init__(chain_id, abi)
+    def __init__(self, chain_id: int, order_abi: Sequence[str]) -> None:
+        super().__init__(chain_id, order_abi)
 
 
 class ExclusiveDutchOrderEncoder(Encoder):
@@ -182,3 +199,7 @@ class ExclusiveDutchOrderEncoder(Encoder):
             message_types=exclusive_dutch_order_types,
             message_data=message_data
         )
+
+    @staticmethod
+    def execute(order: bytes, sig: bytes) -> HexStr:
+        return _Encoder._execute(order, sig)
