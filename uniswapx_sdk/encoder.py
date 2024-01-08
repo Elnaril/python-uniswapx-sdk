@@ -97,22 +97,32 @@ def get_nonce() -> int:
     return time.time_ns() * 10**58 + randint(10**57, 10**58-1)
 
 
-class _Encoder:
+class Encoder:
     def __init__(self, chain_id: int, order_abi: Sequence[str]) -> None:
         self.chain_id = chain_id
         self.order_abi = order_abi
 
-    def _encode(self, args: Sequence[Any]) -> bytes:
+    def encode(self, args: Sequence[Any]) -> bytes:
         return encode(self.order_abi, args)
 
+    def create_signable_message(self, message_types: Dict[str, Any], message_data: Dict[str, Any]) -> SignableMessage:
+        domain_data = dict(permit2_domain_data)
+        domain_data["chainId"] = self.chain_id
+        return encode_typed_data(
+            domain_data=domain_data,
+            message_types=message_types,
+            message_data=message_data
+        )
+
     @staticmethod
-    def _execute(order: bytes, sig: bytes) -> HexStr:
+    def encode_execute(order: bytes, sig: bytes) -> HexStr:
+        """
+        Encode the input data to include in the transactions sent to the reactors.
+        :param order: the encoded order
+        :param sig: the signature (so the SignableMessage after being signed)
+        :return: The encoded input data
+        """
         return HexStr(_execute_function_selector + encode(('(bytes,bytes)', ), ((order, sig), )).hex())
-
-
-class Encoder(_Encoder):
-    def __init__(self, chain_id: int, order_abi: Sequence[str]) -> None:
-        super().__init__(chain_id, order_abi)
 
 
 class ExclusiveDutchOrderEncoder(Encoder):
@@ -133,15 +143,26 @@ class ExclusiveDutchOrderEncoder(Encoder):
         args.append(tuple(map(lambda dutch_output: astuple(dutch_output), dutch_outputs)))
         return tuple(args)
 
-    def encode(
+    def encode_order(
             self,
             order_info: ExclusiveDutchOrderInfo,
             decay_time: DecayTime,
             dutch_input: ExclusiveDutchOrderInput,
             dutch_outputs: Tuple[ExclusiveDutchOrderOutput, ...],
-            exclusive_filler: ExclusiveFiller = ExclusiveFiller()) -> bytes:
+            exclusive_filler: ExclusiveFiller = ExclusiveFiller()) -> Tuple[bytes, SignableMessage]:
+        """
+        Encode the order and create the signable message to be signed.
+        :param order_info: a valid instance of ExclusiveDutchOrderInfo
+        :param decay_time: a valid instance of DecayTime
+        :param dutch_input: a valid instance of ExclusiveDutchOrderInput
+        :param dutch_outputs: a valid instance of Tuple[ExclusiveDutchOrderOutput, ...]
+        :param exclusive_filler: a valid instance of ExclusiveFiller
+        :return: the encoded order as bytes and a SignableMessage ready to be signed
+        """
         args = self._create_args(order_info, decay_time, dutch_input, dutch_outputs, exclusive_filler)
-        return self._encode([args, ])
+        encoded_order = self.encode([args, ])
+        message = self._create_signable_message(order_info, decay_time, dutch_input, dutch_outputs, exclusive_filler)
+        return encoded_order, message
 
     @staticmethod
     def _create_message_data(
@@ -174,15 +195,13 @@ class ExclusiveDutchOrderEncoder(Encoder):
             "outputs": outputs,
         }
 
-    def create_permit2_signable_message(
+    def _create_signable_message(
             self,
             order_info: ExclusiveDutchOrderInfo,
             decay_time: DecayTime,
             dutch_input: ExclusiveDutchOrderInput,
             dutch_outputs: Tuple[ExclusiveDutchOrderOutput, ...],
             exclusive_filler: ExclusiveFiller = ExclusiveFiller()) -> SignableMessage:
-        domain_data = dict(permit2_domain_data)
-        domain_data["chainId"] = self.chain_id
         witness_data = self._create_message_data(order_info, decay_time, dutch_input, dutch_outputs, exclusive_filler)
         message_data = {
             "permitted": {
@@ -194,12 +213,4 @@ class ExclusiveDutchOrderEncoder(Encoder):
             "deadline": order_info.deadline,
             "witness": witness_data
         }
-        return encode_typed_data(
-            domain_data=domain_data,
-            message_types=exclusive_dutch_order_types,
-            message_data=message_data
-        )
-
-    @staticmethod
-    def execute(order: bytes, sig: bytes) -> HexStr:
-        return _Encoder._execute(order, sig)
+        return self.create_signable_message(exclusive_dutch_order_types, message_data)

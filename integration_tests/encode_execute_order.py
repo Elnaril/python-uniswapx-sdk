@@ -173,8 +173,13 @@ def alice_creates_dutch_order():
     exclusive_filler = ExclusiveFiller()
 
     encoder = ExclusiveDutchOrderEncoder(1)
-    encoded_order = encoder.encode(order_info, decay_time, dutch_input, dutch_outputs, exclusive_filler)
-    signable_message = encoder.create_permit2_signable_message(order_info, decay_time, dutch_input, dutch_outputs, exclusive_filler)  # noqa
+    encoded_order, signable_message = encoder.encode_order(
+        order_info,
+        decay_time,
+        dutch_input,
+        dutch_outputs,
+        exclusive_filler
+    )
     signed_message = alice_account.sign_message(signable_message)
 
     print(" => CREATE DUTCH ORDER: OK")
@@ -198,7 +203,7 @@ def bob_resolves_order(order, sig):
 
 
 def bob_executes_order(order, sig, resolved_order):
-    encoded_input = ExclusiveDutchOrderEncoder.execute(order, sig)
+    encoded_input = ExclusiveDutchOrderEncoder.encode_execute(order, sig)
     trx_hash = send_transaction(bob_account, reactor_address, resolved_order[2][0][1], encoded_input)
 
     receipt = w3.eth.wait_for_transaction_receipt(trx_hash)

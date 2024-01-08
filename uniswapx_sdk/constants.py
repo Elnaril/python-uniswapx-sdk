@@ -16,49 +16,6 @@ _execute_function_selector = HexStr("0x3f62192e")
 uniswapx_api_root = "https://api.uniswap.org/v2/"
 uniswapx_orders_endpoint = f"{uniswapx_api_root}orders"
 
-permit2_domain_data = {
-            "name": "Permit2",
-            "chainId": 1,
-            "verifyingContract": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
-        }
+permit2_domain_data = {"name": "Permit2", "chainId": 1, "verifyingContract": "0x000000000022D473030F116dDEE9F6B43aC78BA3"}  # noqa
 exclusive_dutch_order_abi = ['((address,address,uint256,uint256,address,bytes),uint256,uint256,address,uint256,(address,uint256,uint256),(address,uint256,uint256,address)[])']  # noqa
-exclusive_dutch_order_types = {
-    "PermitWitnessTransferFrom": [
-        {"name": 'permitted', "type": 'TokenPermissions'},
-        {"name": 'spender', "type": 'address'},
-        {"name": 'nonce', "type": 'uint256'},
-        {"name": 'deadline', "type": 'uint256'},
-        {"name": 'witness', "type": "ExclusiveDutchOrder"},
-    ],
-
-    "TokenPermissions": [
-        {'name': 'token', 'type': 'address'},
-        {'name': 'amount', 'type': 'uint256'},
-    ],
-
-    "ExclusiveDutchOrder": [
-        {"name": "info", "type": "OrderInfo"},
-        {"name": "decayStartTime", "type": "uint256"},
-        {"name": "decayEndTime", "type": "uint256"},
-        {"name": "exclusiveFiller", "type": "address"},
-        {"name": "exclusivityOverrideBps", "type": "uint256"},
-        {"name": "inputToken", "type": "address"},
-        {"name": "inputStartAmount", "type": "uint256"},
-        {"name": "inputEndAmount", "type": "uint256"},
-        {"name": "outputs", "type": "DutchOutput[]"},
-    ],
-    "OrderInfo": [
-        {"name": "reactor", "type": "address"},
-        {"name": "swapper", "type": "address"},
-        {"name": "nonce", "type": "uint256"},
-        {"name": "deadline", "type": "uint256"},
-        {"name": "additionalValidationContract", "type": "address"},
-        {"name": "additionalValidationData", "type": "bytes"},
-    ],
-    "DutchOutput": [
-        {"name": "token", "type": "address"},
-        {"name": "startAmount", "type": "uint256"},
-        {"name": "endAmount", "type": "uint256"},
-        {"name": "recipient", "type": "address"},
-    ],
-}
+exclusive_dutch_order_types = {'PermitWitnessTransferFrom': [{'name': 'permitted', 'type': 'TokenPermissions'}, {'name': 'spender', 'type': 'address'}, {'name': 'nonce', 'type': 'uint256'}, {'name': 'deadline', 'type': 'uint256'}, {'name': 'witness', 'type': 'ExclusiveDutchOrder'}], 'TokenPermissions': [{'name': 'token', 'type': 'address'}, {'name': 'amount', 'type': 'uint256'}], 'ExclusiveDutchOrder': [{'name': 'info', 'type': 'OrderInfo'}, {'name': 'decayStartTime', 'type': 'uint256'}, {'name': 'decayEndTime', 'type': 'uint256'}, {'name': 'exclusiveFiller', 'type': 'address'}, {'name': 'exclusivityOverrideBps', 'type': 'uint256'}, {'name': 'inputToken', 'type': 'address'}, {'name': 'inputStartAmount', 'type': 'uint256'}, {'name': 'inputEndAmount', 'type': 'uint256'}, {'name': 'outputs', 'type': 'DutchOutput[]'}], 'OrderInfo': [{'name': 'reactor', 'type': 'address'}, {'name': 'swapper', 'type': 'address'}, {'name': 'nonce', 'type': 'uint256'}, {'name': 'deadline', 'type': 'uint256'}, {'name': 'additionalValidationContract', 'type': 'address'}, {'name': 'additionalValidationData', 'type': 'bytes'}], 'DutchOutput': [{'name': 'token', 'type': 'address'}, {'name': 'startAmount', 'type': 'uint256'}, {'name': 'endAmount', 'type': 'uint256'}, {'name': 'recipient', 'type': 'address'}]}  # noqa

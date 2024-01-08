@@ -15,19 +15,19 @@ from web3.types import (
 from uniswapx_sdk.constants import exclusive_dutch_order_abi
 
 
-class _Decoder:
+class Decoder:
     def __init__(self, abi: Sequence[str]) -> None:
         self.abi = abi
 
     def decode(self, encoded_order: Union[HexStr, HexBytes]) -> Tuple[Any, ...]:
+        """
+        Decode UniswapX orders
+        :param encoded_order: A UniswapX encoded order
+        :return: The decoded order
+        """
         order = encoded_order.hex() if isinstance(encoded_order, bytes) else encoded_order
         data = to_bytes(hexstr=order)
         return decode(self.abi, data)
-
-
-class Decoder(_Decoder):
-    def __init__(self, abi: Sequence[str]) -> None:
-        super().__init__(abi)
 
 
 class ExclusiveDutchOrderDecoder(Decoder):
