@@ -21,6 +21,8 @@ from uniswapx_sdk.encoder import (
     ExclusiveDutchOrderInput,
     ExclusiveDutchOrderOutput,
     ExclusiveFiller,
+    get_deadline,
+    get_nonce,
 )
 from uniswapx_sdk.resolver import OrderResolver
 
@@ -153,13 +155,14 @@ def alice_approves_permit2_for_usdc():
 
 
 def alice_creates_dutch_order():
+    deadline = get_deadline()
     order_info = ExclusiveDutchOrderInfo(
         reactor=reactor_address,
         swapper=alice_account.address,
-        nonce=17044488556984821651367783140780206339718078492509275355826173425128561760239,
-        deadline=1714561900,
+        nonce=get_nonce(),
+        deadline=deadline,
     )
-    decay_time = DecayTime(1704561560, 1714561890)
+    decay_time = DecayTime(get_deadline(-1), deadline)
     dutch_input = ExclusiveDutchOrderInput(usdc_address, 1000 * 10**6, 1000 * 10**6)
 
     dutch_outputs = (
