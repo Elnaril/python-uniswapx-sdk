@@ -19,13 +19,13 @@
 ---
 
 ## Release Notes
-### V0.2.0
+### V0.0.2
  - Exclusive Dutch Order Encoder
  - Reactor Execute Encoder
  - Get Orders from UniswapX API
  - Integration Tests
  - Documentation
-### V0.1.0
+### V0.0.1
  - Exclusive Dutch Order Decoder
  - Order Resolver
 
